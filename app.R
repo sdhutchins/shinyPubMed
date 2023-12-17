@@ -99,7 +99,7 @@ server <- function(input, output, session) {
       autoWidth = TRUE,
       columnDefs = list(
         list(
-          targets = 7, # Assuming the 'Link' column is the 5th column
+          targets = 6, # Assuming the 'Link' column is the 7th column
           render = JS(
             "function(data, type, row, meta) {",
             "  return type === 'display' && data !== null && data !== '' ?",
@@ -162,7 +162,7 @@ server <- function(input, output, session) {
     abstracts <- paste(abstracts, sep="", collapse="") 
     
     wordcloud(abstracts, 
-              scale = c(3, 2),
+              scale = c(3, 1),
               min.freq=10, 
               max.words=70, colors=brewer.pal(7,"Dark2"))
   })
