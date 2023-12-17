@@ -38,7 +38,6 @@ fetch_abstracts <- function(id) {
   abstract_text <- xpathSApply(article, "//AbstractText", xmlValue)
   title <- xpathSApply(article, "//ArticleTitle", xmlValue)
   year <- xpathSApply(article, "//PubDate/Year", xmlValue)
-  citations <- xpathSApply(article, "//CitationSubset", length)  # Assuming 'CitationSubset' indicates citations
   first_author <- xpathSApply(article, "//AuthorList/Author[1]/LastName", xmlValue)
   journal <- xpathSApply(article, "//Journal/Title", xmlValue)
   link <- paste0("https://pubmed.ncbi.nlm.nih.gov/", id)
@@ -48,7 +47,15 @@ fetch_abstracts <- function(id) {
     PubMedID = id, 
     Title = ifelse(length(title) > 0, title[[1]], NA),
     Year = ifelse(length(year) > 0, year[[1]], NA),
-    Abstract = ifelse(length(abstract_text) > 0, abstract_text[[1]], NA),
+    Abstract = ifelse(length(abstract_text) > 0, 
+                      {
+                        sentences <- unlist(strsplit(abstract_text[[1]], "(?<=[.!?])\\s+", perl=TRUE))
+                        first_two <- head(sentences, 2)
+                        last_two <- tail(sentences, 2)
+                        combined <- c(first_two, last_two)
+                        paste(combined, collapse=" ")
+                      }, 
+                      NA),
     FirstAuthor = ifelse(length(first_author) > 0, first_author[[1]], NA),
     Journal = ifelse(length(journal) > 0, journal[[1]], NA),
     Link = link,
