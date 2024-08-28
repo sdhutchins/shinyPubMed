@@ -11,7 +11,7 @@ fetch_pubmed_ids <- function(search_terms_input, from_year, to_year) {
   terms <- sapply(terms, trimws)
   
   # Format terms into "(term1) OR (term2) OR ..." structure
-  formatted_terms <- paste0("(", paste(terms, collapse = ") OR ("), ")")
+  formatted_terms <- paste0("(", paste(terms, collapse = ") AND ("), ")")
   
   # Add year range to the query
   date_range_query <- paste0(formatted_terms, " AND (", from_year, ":", to_year, "[PDAT])")
